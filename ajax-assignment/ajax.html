@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+</head>
+<body style="background-color:#cabccf">
+<div class="container-fluid">
+<div style="background-color:#4682b4; height:100px">
+<h1 style="text-align:center; color:#f6f9fa">Welcome to Github information center </h1>
+</div>
+
+<div class="container" style="background-color:#f6f9fa; margin-top:10px">
+<div style="margin-top:20px; text-align:center">
+<form  class="form" id=formToSerialize>
+        <label for="username">Username </label>
+        <input id="username" name="username" type=text/>
+	  </form>
+<button id="get-data">Get User Info</button>
+<button style="background-color:red; color:white" id="reset">Reset</button>
+	   
+	   </div>
+
+      <div style="text-align:center" class="row">
+        <img class="col-md-2 col-sm-12 col-xs-12 img-circle" id="user-image" src="">
+        <h5  class="col-md-5 col-sm-12 col-xs-12" id="user-id"></h5>	
+      <h5  class="col-md-5 col-sm-12 col-xs-12" id="user-created"></h5>
+	  
+	  <h5  class="col-md-5 col-sm-12 col-xs-12" id="user-location"></h5>
+	  <h5  class="col-md-5 col-sm-12 col-xs-12" id="user-company"></h5>
+	  <h5  class="col-md-5 col-sm-12 col-xs-12" id="user-url"></h5>
+	  
+	  
+	  </div>
+	  </div>
+</div>
+</body>
+<script>
+$("#reset").click(function() {
+window.location.href="ajax.html";
+});
+      $(document).ajaxStart(function(){
+        $("#user-image").attr("src","progress.gif");
+      }).ajaxStop(function(){
+        console.log("Ajax Stopped.")
+      }).ajaxSuccess(function(){
+        console.log("Ajax Success")
+      }).ajaxComplete(function(){
+        console.log("Ajax Completed")
+      })
+
+      $("#get-data").on("click",function(){
+        var username = $("#username").val();
+     
+        $.ajax({
+          url:"https://api.github.com/users/"+username,
+          success: function(data){
+            console.log(data)
+            $("#user-image").attr("src",data.avatar_url);
+            $("#user-id").text("User id is : "+data.id);
+          $("#user-created").text("User created at : "+data.created_at);
+		  $("#user-location").text("User location is : "+data.location);
+		  $("#user-company").text("User company is : "+data.company);
+		  $("#user-url").text("User company is : "+data.url);
+		  },
+          error: function(){
+            $("#user-image").attr("src","no-user.png");
+            $("#user-id").text("User not found");
+          $("#user-created").text("Not Exist");
+		  $("#user-location").text("Not Exist");
+		  $("#user-company").text("Not Working");
+		  $("#user-url").text("Not Exist");
+		  
+		  
+		  }
+        })
+      })
+    </script>
+</html>
